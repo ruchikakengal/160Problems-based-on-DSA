@@ -1,0 +1,66 @@
+Linked List Group Reverse Difficulty: HardAccuracy: 57.08%Submissions: 260K+Points: 8Average Time: 30m You are given the head of a Singly linked list. You have to reverse every k node in the linked list and return the head of the modified list. Note: If the number of nodes is not a multiple of k then the left-out nodes at the end, should be considered as a group and must be reversed. Examples: Input: k = 2, Output: 2 -> 1 -> 4 -> 3 -> 6 -> 5
+
+
+
+---------code-----------------------
+class Solution {
+  public:
+    Node* reverseKGroup(Node* head, int k) {
+        if (!head) return nullptr;
+
+        Node* curr = head;
+        Node* prev = nullptr;
+        Node* next = nullptr;
+        int count = 0;
+
+        // Check if there are at least k nodes to reverse
+        Node* temp = head;
+        int nodeCount = 0;
+        while (temp && nodeCount < k) {
+            temp = temp->next;
+            nodeCount++;
+        }
+        if (nodeCount < k) {
+            // Reverse the remaining nodes as well
+            k = nodeCount;
+        }
+
+        count = 0;
+        // Reverse k nodes
+        while (curr && count < k) {
+            next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+            count++;
+        }
+
+        // Recursively call for the next part of the list
+        if (next != nullptr) {
+            head->next = reverseKGroup(next, k);
+        }
+
+        // prev is the new head after reversing
+        return prev;
+    }
+};
+
+
+--------------------------------------------
+
+✅ How it works:
+
+Count k nodes from current position. If nodes are less than k, reverse whatever is left.
+
+Reverse the first k nodes iteratively.
+
+Recursively reverse the rest of the list and connect to the current group.
+
+Return the new head of the reversed group.
+
+Example:
+
+Input: 1->2->3->4->5->6 and k = 2
+Output: 2->1->4->3->6->5
+
+This handles all cases, including when the last group has fewer than k nodes.
