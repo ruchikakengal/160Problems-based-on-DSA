@@ -1,0 +1,59 @@
+1323. Maximum 69 Number Easy Topics premium lock icon Companies Hint You are given a positive integer num consisting only of digits 6 and 9. Return the maximum number you can get by changing at most one digit (6 becomes 9, and 9 becomes 6). Example 1: Input: num = 9669 Output: 9969 Explanation: Changing the first digit results in 6669. Changing the second digit results in 9969. Changing the third digit results in 9699. Changing the fourth digit results in 9666. The maximum number is 9969. Example 2: Input: num = 9996 Output: 9999 Explanation: Changing the last digit 6 to 9 results in the maximum number. Example 3: Input: num = 9999 Output: 9999 Explanation: It is better not to apply any change. Constraints: 1 <= num <= 104 num consists of only 6 and 9 digits.
+
+
+------------
+class Solution {
+  public:
+    static bool cmp(string &a, string &b) {
+        return a + b > b + a;
+    }
+    
+    string findLargest(vector<int> &arr) {
+        vector<string> nums;
+        for (int num : arr) nums.push_back(to_string(num));
+        
+        sort(nums.begin(), nums.end(), cmp);
+        
+        if (nums[0] == "0") return "0";  // Edge case: all zeros
+        
+        string result = "";
+        for (string &s : nums) result += s;
+        
+        return result;
+    }
+};
+
+
+----------
+
+
+
+🔎 Explanation
+
+Convert integers to strings → easier to concatenate and compare.
+
+Use a custom comparator:
+
+For two strings a and b, compare a+b and b+a.
+
+Example: "9"+"34" = "934", "34"+"9" = "349". Since "934" > "349", "9" comes before "34".
+
+Sort the array using this comparator.
+
+Concatenate sorted strings.
+
+Handle edge case: if the largest number starts with "0", return "0" (e.g., [0,0]).
+
+✅ Example Walkthrough
+
+Input: [3, 30, 34, 5, 9]
+
+Sorted order: ["9", "5", "34", "3", "30"]
+
+Result = "9534330"
+
+Complexity
+
+Time: O(n log n * k) where k = max digit length.
+
+Space: O(n) for string conversion.
