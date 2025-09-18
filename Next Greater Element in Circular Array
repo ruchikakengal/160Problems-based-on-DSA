@@ -1,0 +1,23 @@
+Next Greater Element in Circular Array Difficulty: MediumAccuracy: 56.97%Submissions: 63K+Points: 4 Given a circular integer array arr[], the task is to determine the next greater element (NGE) for each element in the array. The next greater element of an element arr[i] is the first element that is greater than arr[i] when traversing circularly. If no such element exists, return -1 for that position. Note: Since the array is circular, after reaching the last element, the search continues from the beginning until we have looked at all elements once. Examples: Input: arr[] = [1, 3, 2, 4] Output: [3, 4, 4, -1]
+
+
+class Solution {
+public:
+    vector<int> nextGreater(vector<int> &arr) {
+        int n = arr.size();
+        vector<int> res(n, -1);
+        stack<int> st; // store indices
+
+        for (int i = 2*n - 1; i >= 0; i--) {
+            int idx = i % n;
+            while (!st.empty() && arr[st.top()] <= arr[idx]) {
+                st.pop();
+            }
+            if (!st.empty()) {
+                res[idx] = arr[st.top()];
+            }
+            st.push(idx);
+        }
+        return res;
+    }
+};
