@@ -1,0 +1,66 @@
+Merge Sort for Linked List Difficulty: MediumAccuracy: 74.76%Submissions: 81K+Points: 4Average Time: 30m You are given the head of a linked list. You have to sort the given linked list using Merge Sort. Examples: Input: Output: 10 -> 20 -> 30 -> 40 -> 50 -> 60 Explanation: After sorting the given linked list, the resultant list will be: Input: Output: 2 -> 5 -> 8 -> 9 Explanation: After sorting the given linked list, the resultant list will be: Constraints: 1 ≤ number of nodes ≤ 105 0 ≤ node->data ≤ 106 /*
+
+class Solution {
+  public:
+    Node* merge(Node* left, Node* right) {
+        if (!left) return right;
+        if (!right) return left;
+        
+        Node* result = nullptr;
+        
+        if (left->data <= right->data) {
+            result = left;
+            result->next = merge(left->next, right);
+        } else {
+            result = right;
+            result->next = merge(left, right->next);
+        }
+        return result;
+    }
+    
+    Node* getMid(Node* head) {
+        Node* slow = head;
+        Node* fast = head->next;
+        
+        while (fast && fast->next) {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        return slow;
+    }
+    
+    Node* mergeSort(Node* head) {
+        if (!head || !head->next) return head;
+        
+        Node* mid = getMid(head);
+        Node* left = head;
+        Node* right = mid->next;
+        mid->next = nullptr;
+        
+        left = mergeSort(left);
+        right = mergeSort(right);
+        
+        return merge(left, right);
+    }
+};
+
+
+
+
+
+Explanation:
+
+Base case:
+If the list is empty or has only one node, return it (already sorted).
+
+Find the middle:
+Using slow–fast pointer approach, we split the list into two halves.
+
+Recursive sort:
+Call mergeSort on both halves.
+
+Merge:
+Merge the two sorted halves using the merge function.
+
+✅ Time Complexity: O(n log n)
+✅ Space Complexity: O(log n) (recursion stack)
