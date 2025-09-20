@@ -1,0 +1,33 @@
+Longest Subarray Length Difficulty: MediumAccuracy: 45.14%Submissions: 13K+Points: 4 You are given an array of integers arr[]. Your task is to find the length of the longest subarray such that all the elements of the subarray are smaller than or equal to the length of the subarray. Examples: Input: arr[] = [1, 2, 3] Output: 3 Explanation: The longest subarray is the entire array itself, which has a length of 3. All elements in the subarray are less than or equal to 3.
+
+----------------------
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    int longestSubarray(vector<int>& arr) {
+        int n = arr.size();
+        deque<int> dq; 
+        int left = 0, ans = 0;
+
+        for (int right = 0; right < n; right++) {
+            // maintain decreasing deque
+            while (!dq.empty() && arr[dq.back()] <= arr[right])
+                dq.pop_back();
+            dq.push_back(right);
+
+            // shrink if max > window length
+            while (!dq.empty() && arr[dq.front()] > (right - left + 1)) {
+                if (dq.front() == left) dq.pop_front();
+                left++;
+            }
+
+            ans = max(ans, right - left + 1);
+        }
+
+        return ans;
+    }
+};
+
+---------------------
