@@ -1,0 +1,43 @@
+----
+class Solution {
+    public double soupServings(int n) {
+        if (n > 4800) return 1.0; // Probability approaches 1 for large n
+        
+        int m = (int) Math.ceil(n / 25.0);
+        Double[][] memo = new Double[m + 1][m + 1];
+        return dfs(m, m, memo);
+    }
+    
+    private double dfs(int a, int b, Double[][] memo) {
+        if (a <= 0 && b <= 0) return 0.5; // both empty at same time
+        if (a <= 0) return 1.0;           // A empty first
+        if (b <= 0) return 0.0;           // B empty first
+        
+        if (memo[a][b] != null) return memo[a][b];
+        
+        memo[a][b] = 0.25 * (
+            dfs(a - 4, b, memo) +        // 100 ml A, 0 ml B
+            dfs(a - 3, b - 1, memo) +    // 75 ml A, 25 ml B
+            dfs(a - 2, b - 2, memo) +    // 50 ml A, 50 ml B
+            dfs(a - 1, b - 3, memo)      // 25 ml A, 75 ml B
+        );
+        return memo[a][b];
+    }
+}
+
+----
+
+
+How it works:
+
+Scaling: m = ceil(n / 25) converts the problem to “units” of 25 mL.
+
+DFS with memoization: Recursively calculate the probability for each (a, b) while caching results in memo to avoid recomputation.
+
+Base Cases:
+
+Both soups empty → probability 0.5.
+
+Only A empty → probability 1.0.
+
+Only B empty → probability 0.0.
