@@ -1,0 +1,27 @@
+Queue Reversal Difficulty: EasyAccuracy: 77.98%Submissions: 151K+Points: 2 Given a queue q containing integer elements, your task is to reverse the queue. Examples: Input: q[] = [5, 10, 15, 20, 25] Output: [25, 20, 15, 10, 5]
+
+
+---------
+class Solution {
+public:
+    void reverseQueue(queue<int> &q) {
+        stack<int> st;
+        while (!q.empty()) {
+            st.push(q.front());
+            q.pop();
+        }
+        while (!st.empty()) {
+            q.push(st.top());
+            st.pop();
+        }
+    }
+};
+
+--------
+
+
+✅ Works because recursion goes till the last element, then pushes them back in reverse order.
+
+Time Complexity: O(n)
+
+Space Complexity: O(n) (due to recursion stack)
