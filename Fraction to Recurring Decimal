@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    string fractionToDecimal(int numerator, int denominator) {
+        if (numerator == 0) return "0";
+
+        string result;
+
+        // Handle sign
+        if ((numerator < 0) ^ (denominator < 0)) 
+            result += "-";
+
+        // Convert to long long for overflow
+        long long num = llabs((long long)numerator);
+        long long den = llabs((long long)denominator);
+
+        // Integer part
+        result += to_string(num / den);
+        long long rem = num % den;
+        if (rem == 0) return result;  // No decimal part
+
+        result += ".";
+
+        // Map to store remainders and their positions
+        unordered_map<long long, int> seen;
+        string fracPart;
+
+        while (rem != 0) {
+            if (seen.count(rem)) {
+                // Insert '(' at the position where remainder first appeared
+                fracPart.insert(seen[rem], "(");
+                fracPart += ")";
+                result += fracPart;
+                return result;
+            }
+
+            seen[rem] = fracPart.size();
+            rem *= 10;
+            fracPart += to_string(rem / den);
+            rem %= den;
+        }
+
+        result += fracPart;
+        return result;
+    }
+};
