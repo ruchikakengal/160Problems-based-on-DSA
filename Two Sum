@@ -1,0 +1,14 @@
+def twoSum(nums, target):
+    num_map = {}  # to store number: index
+    for i, num in enumerate(nums):
+        diff = target - num
+        if diff in num_map:
+            return [num_map[diff], i]
+        num_map[num] = i
+    return []
+    
+
+# Example run
+nums = [2, 7, 11, 15]
+target = 9
+print("Indices:", twoSum(nums, target))  # Output: [0, 1]
