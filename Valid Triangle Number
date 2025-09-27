@@ -1,0 +1,84 @@
+Valid Triangle Number Medium Topics premium lock icon Companies Given an integer array nums, return the number of triplets chosen from the array that can make triangles if we take them as side lengths of a triangle. Example 1: Input: nums = [2,2,3,4] Output: 3 Explanation: Valid combinations are: 2,3,4 (using the first 2) 2,3,4 (using the second 2) 2,2,3 Example 2: Input: nums = [4,2,3,4] Output: 4 Constraints: 1 <= nums.length <= 1000 0 <= nums[i] <= 1000
+
+
+
+
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+class Solution {
+public:
+    int triangleNumber(vector<int>& nums) {
+        int n = nums.size();
+        if (n < 3) return 0;
+        
+        sort(nums.begin(), nums.end());
+        int count = 0;
+        
+        for (int k = n - 1; k >= 2; k--) {
+            int i = 0, j = k - 1;
+            while (i < j) {
+                if (nums[i] + nums[j] > nums[k]) {
+                    count += (j - i);
+                    j--;
+                } else {
+                    i++;
+                }
+            }
+        }
+        
+        return count;
+    }
+};
+
+
+We need to count the number of triplets (a, b, c) that can form a valid triangle.
+
+✅ Observation: For three sides to form a triangle:
+
+𝑎
++
+𝑏
+>
+𝑐
+,
+𝑏
++
+𝑐
+>
+𝑎
+,
+𝑎
++
+𝑐
+>
+𝑏
+a+b>c,b+c>a,a+c>b
+
+If we sort the array, we only need to check nums[i] + nums[j] > nums[k] (with i < j < k) because the array is sorted (nums[i] <= nums[j] <= nums[k]), so the other two inequalities are automatically satisfied.
+
+This allows us to use a two-pointer approach for efficiency.
+
+
+✅ Explanation:
+
+Sort the array for easy comparison.
+
+Fix the largest side nums[k].
+
+Use two pointers i and j to find all pairs (nums[i], nums[j]) such that nums[i] + nums[j] > nums[k].
+
+If it satisfies, all elements between i and j also satisfy, so we add (j - i) to the count.
+
+💡 Complexity:
+
+Sorting: O(n log n)
+
+Two-pointer check: O(n^2)
+
+This is efficient for n <= 1000.
+
+
+
+
