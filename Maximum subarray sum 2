@@ -1,0 +1,94 @@
+Maximum subarray sum 2 Difficulty: HardAccuracy: 63.33%Submissions: 8K+Points: 8 You are given an array arr[] of integers and two integers a and b, You have to find the maximum possible sum of a contiguous subarray whose length is at least a and at most b. Examples: Input: arr[] = [4, 5, -1, -2, 6], a = 2, b = 4 Output: 9 Explanation: The subarray [4, 5] has length 2 and sum 9, which is the maximum among all subarrays of length between 2 and 4
+
+Approach
+
+Compute prefix sums: prefix[i] = sum of arr[0..i-1].
+
+For subarrays [i, j] of length between a and b, the sum is:
+
+𝑠
+𝑢
+𝑚
+=
+𝑝
+𝑟
+𝑒
+𝑓
+𝑖
+𝑥
+[
+𝑗
++
+1
+]
+−
+𝑝
+𝑟
+𝑒
+𝑓
+𝑖
+𝑥
+[
+𝑖
+]
+sum=prefix[j+1]−prefix[i]
+
+To maximize the sum for j, we need the minimum prefix in range [j-b, j-a].
+
+Use a deque to maintain the minimum prefix efficiently.
+---
+import java.util.Deque;
+import java.util.LinkedList;
+
+class Solution {
+    public int maxSubarrSum(int[] arr, int a, int b) {
+        int n = arr.length;
+        long[] prefix = new long[n + 1];
+        for (int i = 0; i < n; i++) {
+            prefix[i + 1] = prefix[i] + arr[i];
+        }
+
+        long maxSum = Long.MIN_VALUE;
+        Deque<Integer> dq = new LinkedList<>();
+
+        for (int j = 1; j <= n; j++) {
+            // remove indices out of window [j-b, j-a]
+            while (!dq.isEmpty() && dq.peekFirst() < j - b) {
+                dq.pollFirst();
+            }
+
+            // add prefix[j - a] to deque maintaining increasing order
+            if (j - a >= 0) {
+                int idx = j - a;
+                while (!dq.isEmpty() && prefix[dq.peekLast()] >= prefix[idx]) {
+                    dq.pollLast();
+                }
+                dq.addLast(idx);
+            }
+
+            if (!dq.isEmpty()) {
+                maxSum = Math.max(maxSum, prefix[j] - prefix[dq.peekFirst()]);
+            }
+        }
+
+        return (int)maxSum;
+    }
+}
+
+---
+
+Explanation
+
+prefix[j] - prefix[i] gives sum of subarray arr[i..j-1].
+
+For each j, valid i are in [j-b, j-a].
+
+We maintain a deque to get the minimum prefix in the valid range efficiently.
+
+Time complexity: O(n), Space complexity: O(n).
+
+Example
+int[] arr = {4, 5, -1, -2, 6};
+int a = 2, b = 4;
+Solution sol = new Solution();
+System.out.println(sol.maxSubarrSum(arr, a, b)); // Output: 9
