@@ -1,0 +1,26 @@
+C++
+
+---
+#include <vector>
+#include <string>
+using namespace std;
+
+class Solution {
+public:
+    void generate(int n, string current, vector<string>& res) {
+        if (current.size() == n) {
+            res.push_back(current);
+            return;
+        }
+        generate(n, current + '0', res);
+        generate(n, current + '1', res);
+    }
+    
+    vector<string> binstr(int n) {
+        vector<string> res;
+        generate(n, "", res);
+        return res;
+    }
+};
+
+---
