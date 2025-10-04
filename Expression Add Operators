@@ -1,0 +1,39 @@
+cpp-/
+
+class Solution {
+public:
+    vector<string> result;
+    
+    void backtrack(string &s, int target, int pos, long long eval, long long multed, string expr) {
+        if (pos == s.size()) {
+            if (eval == target) result.push_back(expr);
+            return;
+        }
+
+        for (int i = pos; i < s.size(); i++) {
+            if (i != pos && s[pos] == '0') break; // avoid leading zeros
+            
+            string part = s.substr(pos, i - pos + 1);
+            long long cur = stoll(part);
+
+            if (pos == 0) {
+                // First number, start expression
+                backtrack(s, target, i + 1, cur, cur, part);
+            } else {
+                // Addition
+                backtrack(s, target, i + 1, eval + cur, cur, expr + "+" + part);
+                // Subtraction
+                backtrack(s, target, i + 1, eval - cur, -cur, expr + "-" + part);
+                // Multiplication
+                backtrack(s, target, i + 1, eval - multed + multed * cur, multed * cur, expr + "*" + part);
+            }
+        }
+    }
+
+    vector<string> findExpr(string &s, int target) {
+        result.clear();
+        backtrack(s, target, 0, 0, 0, "");
+        sort(result.begin(), result.end()); // lexicographically smallest order
+        return result;
+    }
+};
