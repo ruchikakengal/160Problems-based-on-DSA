@@ -1,0 +1,29 @@
+cpp-/
+
+class Solution {
+  public:
+    Node* build(vector<int>& pre, vector<int>& post, int& preIndex, int l, int r, int size) {
+        if (preIndex >= size || l > r) return nullptr;
+
+        Node* root = new Node(pre[preIndex++]);
+        if (l == r || preIndex >= size) return root;
+
+        int i;
+        for (i = l; i <= r; i++) {
+            if (post[i] == pre[preIndex])
+                break;
+        }
+
+        if (i <= r) {
+            root->left = build(pre, post, preIndex, l, i, size);
+            root->right = build(pre, post, preIndex, i + 1, r - 1, size);
+        }
+        return root;
+    }
+
+    Node* constructTree(vector<int>& pre, vector<int>& post) {
+        int preIndex = 0;
+        int size = pre.size();
+        return build(pre, post, preIndex, 0, size - 1, size);
+    }
+};
