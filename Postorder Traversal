@@ -1,0 +1,28 @@
+gfg POTD 
+
+Postorder Traversal
+
+cpp-/
+
+class Solution {
+  public:
+    vector<int> postOrder(Node* root) {
+        vector<int> res;
+        if(!root) return res;
+        
+        stack<Node*> st;
+        st.push(root);
+        
+        while(!st.empty()) {
+            Node* node = st.top();
+            st.pop();
+            res.push_back(node->data);
+            
+            if(node->left) st.push(node->left);
+            if(node->right) st.push(node->right);
+        }
+        
+        reverse(res.begin(), res.end());
+        return res;
+    }
+};
