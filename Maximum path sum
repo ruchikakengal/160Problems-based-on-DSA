@@ -1,0 +1,35 @@
+gfg Maximum path sum 11/out/2025
+
+cpp-/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+    Node(int val) : data(val), left(NULL), right(NULL) {}
+};
+
+class Solution {
+public:
+    int maxSum;
+
+    int dfs(Node* root) {
+        if (!root) return 0;
+
+        int left = max(0, dfs(root->left));   // ignore negative paths
+        int right = max(0, dfs(root->right));
+
+        maxSum = max(maxSum, root->data + left + right); // best including both sides
+
+        return root->data + max(left, right);  // best single branch upward
+    }
+
+    int findMaxSum(Node* root) {
+        maxSum = INT_MIN;
+        dfs(root);
+        return maxSum;
+    }
+};
