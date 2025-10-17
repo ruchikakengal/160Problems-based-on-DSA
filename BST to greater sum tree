@@ -1,0 +1,18 @@
+GFG TODAY POTD - 17/10/2025
+BST to greater sum tree
+
+cpp-/
+
+class Solution {
+  public:
+    int sum = 0;
+    
+    void transformTree(Node *root) {
+        if (!root) return;
+        
+        transformTree(root->right);
+        sum += root->data;
+        root->data = sum - root->data;
+        transformTree(root->left);
+    }
+};
