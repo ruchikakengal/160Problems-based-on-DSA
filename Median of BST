@@ -1,0 +1,19 @@
+cpp-/
+
+class Solution {
+  public:
+    void inorder(Node* root, vector<int>& vals) {
+        if (!root) return;
+        inorder(root->left, vals);
+        vals.push_back(root->data);
+        inorder(root->right, vals);
+    }
+
+    int findMedian(Node* root) {
+        vector<int> vals;
+        inorder(root, vals);
+        int n = vals.size();
+        if (n % 2 == 0) return vals[n / 2 - 1];
+        else return vals[n / 2];
+    }
+};
