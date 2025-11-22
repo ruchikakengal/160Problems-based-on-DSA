@@ -1,0 +1,37 @@
+GFG POTD 22/11/2025
+
+cpp-/
+
+class Solution {
+public:
+    vector<int> parent;
+    
+    int find(int x) {
+        if(parent[x] != x)
+            parent[x] = find(parent[x]);
+        return parent[x];
+    }
+    
+    void unite(int x, int y) {
+        int px = find(x);
+        int py = find(y);
+        if(px != py)
+            parent[px] = py;
+    }
+    
+    int minConnect(int V, vector<vector<int>>& edges) {
+        if(edges.size() < V - 1) return -1;
+        
+        parent.resize(V);
+        for(int i = 0; i < V; i++) parent[i] = i;
+        
+        for(auto &e : edges)
+            unite(e[0], e[1]);
+        
+        int components = 0;
+        for(int i = 0; i < V; i++)
+            if(parent[i] == i) components++;
+        
+        return components - 1;
+    }
+};
