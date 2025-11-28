@@ -1,0 +1,30 @@
+cpp-/
+class Solution {
+public:
+    vector<int> subsetXOR(int n) {
+        auto xor1ton = [&](int x) {
+            if (x % 4 == 0) return x;
+            if (x % 4 == 1) return 1;
+            if (x % 4 == 2) return x + 1;
+            return 0;
+        };
+
+        int x = xor1ton(n);
+
+        // case 1: XOR(1..n) == n => use all numbers
+        if (x == n) {
+            vector<int> ans;
+            for (int i = 1; i <= n; i++) ans.push_back(i);
+            return ans;
+        }
+
+        // case 2: remove one element y = x ^ n
+        int y = x ^ n;
+
+        vector<int> ans;
+        for (int i = 1; i <= n; i++) {
+            if (i != y) ans.push_back(i);
+        }
+        return ans;
+    }
+};
