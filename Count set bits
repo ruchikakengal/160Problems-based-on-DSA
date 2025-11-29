@@ -1,0 +1,21 @@
+GFG POTD 29/11/2025
+
+cpp-/
+
+class Solution {
+  public:
+    int countSetBits(int n) {
+        if (n == 0) return 0;
+        
+        int p = 0;
+        while ((1 << (p + 1)) <= n) p++;
+        
+        int powerOf2 = 1 << p;
+        
+        int bitsUpToPower = p * (powerOf2 >> 1);
+        int msbBits = n - powerOf2 + 1;
+        int rest = n - powerOf2;
+        
+        return bitsUpToPower + msbBits + countSetBits(rest);
+    }
+};
