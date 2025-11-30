@@ -1,0 +1,56 @@
+GFG POTD 30/11/2025
+
+cpp-/
+class Solution {
+public:
+    struct State {
+        int link, len;
+        unordered_map<char,int> next;
+        State() : link(-1), len(0) {}
+    };
+
+    int countSubs(string& s) {
+        vector<State> sa(2 * s.size());
+        int last = 0, sz = 1;
+        long long ans = 0;
+
+        for (char c : s) {
+            int cur = sz++;
+            sa[cur].len = sa[last].len + 1;
+            int p = last;
+
+            while (p != -1 && !sa[p].next.count(c)) {
+                sa[p].next[c] = cur;
+                p = sa[p].link;
+            }
+
+            if (p == -1) {
+                sa[cur].link = 0;
+            } else {
+                int q = sa[p].next[c];
+                if (sa[p].len + 1 == sa[q].len) {
+                    sa[cur].link = q;
+                } else {
+                    int clone = sz++;
+                    sa[clone] = sa[q];
+                    sa[clone].len = sa[p].len + 1;
+
+                    while (p != -1 && sa[p].next[c] == q) {
+                        sa[p].next[c] = clone;
+                        p = sa[p].link;
+                    }
+
+                    sa[q].link = sa[cur].link = clone;
+                }
+            }
+            last = cur;
+        }
+
+        // Count distinct substrings = sum(len(state) - len(link(state)))
+        for (int i = 1; i < sz; i++) {
+            ans += sa[i].len - sa[sa[i].link].len;
+        }
+
+        return ans;
+    }
+};
