@@ -1,0 +1,36 @@
+GFG POTD 05/12/2025
+
+Cpp-/
+
+class Solution {
+  public:
+    int minCost(vector<vector<int>> &costs) {
+        int n = costs.size();
+        if (n == 0) return 0;
+        int k = costs[0].size();
+        if (k == 1) return n == 1 ? costs[0][0] : -1;
+        vector<int> dp(k);
+        for (int j = 0; j < k; j++) dp[j] = costs[0][j];
+        for (int i = 1; i < n; i++) {
+            int mn1 = INT_MAX, mn2 = INT_MAX, idx = -1;
+            for (int j = 0; j < k; j++) {
+                if (dp[j] < mn1) {
+                    mn2 = mn1;
+                    mn1 = dp[j];
+                    idx = j;
+                } else if (dp[j] < mn2) {
+                    mn2 = dp[j];
+                }
+            }
+            vector<int> ndp(k);
+            for (int j = 0; j < k; j++) {
+                if (j == idx) ndp[j] = costs[i][j] + mn2;
+                else ndp[j] = costs[i][j] + mn1;
+            }
+            dp = ndp;
+        }
+        int ans = INT_MAX;
+        for (int v : dp) ans = min(ans, v);
+        return ans;
+    }
+};
