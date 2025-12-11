@@ -1,0 +1,35 @@
+GFG POTD 11/12/2025
+
+cpp-/
+
+class Solution {
+public:
+    vector<int> constructArr(vector<int>& arr) {
+        int m = arr.size();
+
+        // n*(n-1)/2 = m  --> solve quadratic to get n
+        long long n = (1 + sqrt(1 + 8LL * m)) / 2;
+
+        vector<int> res(n);
+
+        if (n == 2) {
+            // arr contains only one pair: res[0] + res[1] = arr[0]
+            // choose any valid solution: res[0] = 1, res[1] = arr[0] - 1
+            res[0] = 1;
+            res[1] = arr[0] - 1;
+            return res;
+        }
+
+        long long a = arr[0];
+        long long b = arr[1];
+        long long c = arr[n - 1]; // equals res[1] + res[2]
+
+        res[0] = (a + b - c) / 2;
+
+        for (int i = 1; i < n; i++) {
+            res[i] = arr[i - 1] - res[0];
+        }
+
+        return res;
+    }
+};
