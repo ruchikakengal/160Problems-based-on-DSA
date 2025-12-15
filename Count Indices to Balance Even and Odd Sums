@@ -1,0 +1,50 @@
+GFG POTD 15/12/2025
+
+
+Count Indices to Balance Even and Odd Sums
+Difficulty: MediumAccuracy: 76.84%Submissions: 5K+Points: 4
+Given an array arr[], count the number of indices such that deleting the element at that index and shifting all elements after it one position left results in an array where the sum of elements at even indices equals the sum at odd indices.
+
+Examples:
+
+Input: arr[] = [2, 1, 6, 4]
+Output: 1
+Explaination: After removing arr[1], the resulting array will be [2, 6, 4] the sums of elements at odd index is arr[1] = 6 and the sum of elements at even index is arr[0] + arr[2] = 6.
+
+
+cpp-/
+
+class Solution {
+  public:
+    int cntWays(vector<int>& arr) {
+        int n = arr.size();
+        int totalEven = 0, totalOdd = 0;
+        
+        for(int i = 0; i < n; i++) {
+            if(i % 2 == 0) totalEven += arr[i];
+            else totalOdd += arr[i];
+        }
+        
+        int prefEven = 0, prefOdd = 0;
+        int ans = 0;
+        
+        for(int i = 0; i < n; i++) {
+            int currEven, currOdd;
+            
+            if(i % 2 == 0) {
+                currEven = prefEven + (totalOdd - prefOdd);
+                currOdd = prefOdd + (totalEven - prefEven - arr[i]);
+            } else {
+                currEven = prefEven + (totalOdd - prefOdd - arr[i]);
+                currOdd = prefOdd + (totalEven - prefEven);
+            }
+            
+            if(currEven == currOdd) ans++;
+            
+            if(i % 2 == 0) prefEven += arr[i];
+            else prefOdd += arr[i];
+        }
+        
+        return ans;
+    }
+};
