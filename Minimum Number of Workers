@@ -1,0 +1,36 @@
+GFG POTD 16/01/2026
+
+cpp-/
+
+class Solution {
+public:
+    int minMen(vector<int>& arr) {
+        int n = arr.size();
+        vector<pair<int,int>> v;
+        
+        for (int i = 0; i < n; i++) {
+            if (arr[i] != -1) {
+                int l = max(0, i - arr[i]);
+                int r = min(n - 1, i + arr[i]);
+                v.push_back({l, r});
+            }
+        }
+        
+        sort(v.begin(), v.end());
+        
+        int ans = 0, i = 0, cover = 0;
+        
+        while (cover < n) {
+            int far = cover;
+            while (i < v.size() && v[i].first <= cover) {
+                far = max(far, v[i].second + 1);
+                i++;
+            }
+            if (far == cover) return -1;
+            ans++;
+            cover = far;
+        }
+        
+        return ans;
+    }
+};
