@@ -1,0 +1,36 @@
+cpp-//
+
+class Solution {
+    stack<char> doc, redoStack;
+
+public:
+    void append(char x) {
+        doc.push(x);
+        while (!redoStack.empty()) redoStack.pop();
+    }
+
+    void undo() {
+        if (!doc.empty()) {
+            redoStack.push(doc.top());
+            doc.pop();
+        }
+    }
+
+    void redo() {
+        if (!redoStack.empty()) {
+            doc.push(redoStack.top());
+            redoStack.pop();
+        }
+    }
+
+    string read() {
+        string res;
+        stack<char> temp = doc;
+        while (!temp.empty()) {
+            res.push_back(temp.top());
+            temp.pop();
+        }
+        reverse(res.begin(), res.end());
+        return res;
+    }
+};
