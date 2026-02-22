@@ -1,0 +1,20 @@
+C++//
+
+class Solution {
+  public:
+    long subarrayXor(vector<int> &arr, int k) {
+        unordered_map<int, long> freq;
+        int xr = 0;
+        long count = 0;
+
+        for(int x : arr) {
+            xr ^= x;
+            if(xr == k) count++;
+            int need = xr ^ k;
+            if(freq.find(need) != freq.end())
+                count += freq[need];
+            freq[xr]++;
+        }
+        return count;
+    }
+};
