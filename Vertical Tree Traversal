@@ -1,0 +1,87 @@
+Idea
+
+Root has HD = 0
+
+Left child → HD - 1
+
+Right child → HD + 1
+
+Use a map<int, vector<int>> to store nodes for each vertical line.
+
+Use a queue for BFS so nodes appear in level order.
+
+Finally, read the map from leftmost HD to rightmost HD.
+
+Time Complexity: O(n log n) (because of map)
+Space Complexity: O(n)
+
+C++ Code
+
+***********************************************************************************************************************************************
+
+class Solution {
+  public:
+    vector<vector<int>> verticalOrder(Node *root) {
+        vector<vector<int>> ans;
+        if(!root) return ans;
+        
+        map<int, vector<int>> mp;
+        queue<pair<Node*, int>> q;
+        
+        q.push({root, 0});
+        
+        while(!q.empty()){
+            auto temp = q.front();
+            q.pop();
+            
+            Node* node = temp.first;
+            int hd = temp.second;
+            
+            mp[hd].push_back(node->data);
+            
+            if(node->left) q.push({node->left, hd - 1});
+            if(node->right) q.push({node->right, hd + 1});
+        }
+        
+        for(auto &it : mp){
+            ans.push_back(it.second);
+        }
+        
+        return ans;
+    }
+};
+
+*****************************************************************************************************************************************************************
+
+
+Key Concept
+
+Example tree:
+
+        1
+      /   \
+     2     3
+    / \   / \
+   4  5  6   7
+
+Horizontal distances:
+
+HD -2 : 4
+HD -1 : 2
+HD  0 : 1,5,6
+HD  1 : 3
+HD  2 : 7
+
+Output
+
+[[4], [2], [1,5,6], [3], [7]]
+
+Quick trick to remember
+
+Vertical traversal problems usually combine:
+
+BFS
+
+Horizontal Distance
+
+Map for ordering.
