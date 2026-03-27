@@ -1,0 +1,91 @@
+This is a classic 3D dynamic programming problem.
+
+Key idea
+
+At each row i, both robots are at columns j1 and j2.
+
+We track:
+
+dp[i][j1][j2] = max chocolates collected from row i to end
+Transitions
+
+From (i, j1, j2), both robots can move in 3 directions:
+
+-1, 0, +1
+
+So we try all 9 combinations:
+
+(j1 + dj1, j2 + dj2)
+Important cases
+If both robots land on same cell → count it once
+Otherwise → add both values
+
+
+
+
+C++------------/
+
+class Solution {
+public:
+    int n, m;
+    vector<vector<vector<int>>> dp;
+
+    int solve(int i, int j1, int j2, vector<vector<int>>& grid) {
+        // Out of bounds
+        if (j1 < 0 || j1 >= m || j2 < 0 || j2 >= m)
+            return -1e9;
+
+        // Last row
+        if (i == n - 1) {
+            if (j1 == j2) return grid[i][j1];
+            else return grid[i][j1] + grid[i][j2];
+        }
+
+        // Memoization
+        if (dp[i][j1][j2] != -1)
+            return dp[i][j1][j2];
+
+        int ans = 0;
+
+        // Current chocolates
+        if (j1 == j2) ans += grid[i][j1];
+        else ans += grid[i][j1] + grid[i][j2];
+
+        int maxi = 0;
+
+        // Try all moves
+        for (int dj1 = -1; dj1 <= 1; dj1++) {
+            for (int dj2 = -1; dj2 <= 1; dj2++) {
+                int val = solve(i + 1, j1 + dj1, j2 + dj2, grid);
+                maxi = max(maxi, val);
+            }
+        }
+
+        return dp[i][j1][j2] = ans + maxi;
+    }
+
+    int maxChocolate(vector<vector<int>>& grid) {
+        n = grid.size();
+        m = grid[0].size();
+
+        dp.assign(n, vector<vector<int>>(m, vector<int>(m, -1)));
+
+        return solve(0, 0, m - 1, grid);
+    }
+};
+
+/----------------
+
+
+
+
+
+Complexity
+Time: O(n * m * m * 9) ≈ O(n * m^2)
+Space: O(n * m^2)
+Intuition in one line
+
+
+
+
+You simulate both robots row by row while keeping track of their positions and using memoization to avoid recomputation.
