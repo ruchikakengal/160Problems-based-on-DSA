@@ -1,0 +1,34 @@
+C++/
+
+class Solution {
+  public:
+    
+    bool isPalindrome(string &s) {
+        int i = 0, j = s.size() - 1;
+        
+        while(i < j) {
+            if(s[i] != s[j]) return false;
+            i++;
+            j--;
+        }
+        
+        return true;
+    }
+    
+    bool palindromePair(vector<string>& arr) {
+        int n = arr.size();
+        
+        for(int i = 0; i < n; i++) {
+            for(int j = i + 1; j < n; j++) {
+                
+                string s1 = arr[i] + arr[j];
+                string s2 = arr[j] + arr[i];
+                
+                if(isPalindrome(s1) || isPalindrome(s2))
+                    return true;
+            }
+        }
+        
+        return false;
+    }
+};
