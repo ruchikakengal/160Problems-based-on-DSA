@@ -1,0 +1,35 @@
+Search for Subarray
+Difficulty: HardAccuracy: 48.11%Submissions: 9K+Points: 8
+You are given two integer arrays a[] and b[]. Return all the starting indexes of all the occurences of b[] as a subarray in a[].
+
+Examples:
+
+Input: a[] = [2, 4, 1, 0, 4, 1, 1], b[] = [4, 1]
+Output: [1, 4]
+Explanation: b[] occurs as a subarray in a[] from index 1 to 2 and from index 4 to 5.
+
+
+C++//////////////////////////
+
+class Solution {
+  public:
+    vector<int> search(vector<int> &a, vector<int> &b) {
+        vector<int> ans;
+        int n = a.size(), m = b.size();
+
+        for (int i = 0; i <= n - m; i++) {
+            bool found = true;
+
+            for (int j = 0; j < m; j++) {
+                if (a[i + j] != b[j]) {
+                    found = false;
+                    break;
+                }
+            }
+
+            if (found) ans.push_back(i);
+        }
+
+        return ans;
+    }
+};
