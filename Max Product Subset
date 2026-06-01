@@ -1,0 +1,63 @@
+Max Product Subset
+Difficulty: MediumAccuracy: 17.21%Submissions: 96K+Points: 4
+Given an array arr[], find and return the maximum product possible with the subset of elements present in the array.
+
+Note:
+
+The maximum product can be of a single element also.
+Since the product can be large, return it modulo 109 + 7.
+Examples:
+
+Input: arr[] = [-1, 0, -2, 4, 3]
+Output: 24
+Explanation: Maximum product will be ( -1 * -2 * 4 * 3 ) = 24
+
+
+C++//////////////
+
+class Solution {
+  public:
+    int findMaxProduct(vector<int>& arr) {
+        const long long MOD = 1000000007;
+        
+        int n = arr.size();
+        
+        if(n == 1)
+            return arr[0];
+        
+        long long product = 1;
+        int negCount = 0, zeroCount = 0;
+        int maxNegative = INT_MIN;
+        
+        for(int x : arr) {
+            if(x == 0) {
+                zeroCount++;
+                continue;
+            }
+            
+            if(x < 0) {
+                negCount++;
+                maxNegative = max(maxNegative, x);
+            }
+            
+            product = (product * x) % MOD;
+        }
+        
+        if(zeroCount == n)
+            return 0;
+            
+        if(negCount == 1 && zeroCount + negCount == n)
+            return 0;
+            
+        if(negCount % 2 != 0) {
+            product /= maxNegative;
+        }
+        
+        product %= MOD;
+        
+        if(product < 0)
+            product += MOD;
+            
+        return (int)product;
+    }
+};
